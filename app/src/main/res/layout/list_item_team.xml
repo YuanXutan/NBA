@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scorelinepanel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="left|center_vertical"
+    android:orientation="horizontal"
+    android:padding="3dp" >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/txt_rank"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            android:text="1"/>
+
+        <ImageView
+            android:id="@+id/img_team_flag"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+
+        <TextView
+            android:id="@+id/txt_team_name"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            android:text="barzi"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txt_win"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txt_lost"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"/>
+
+</LinearLayout>

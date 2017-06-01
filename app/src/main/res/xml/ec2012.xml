@@ -1,0 +1,70 @@
+<europe_cup>
+    <group name="A">
+        <teams>
+	        <team name="Colombia" W="2" D="0" L="1" F="4" A="5" Pts="6" />
+	        <team name="Costa_Rica" W="1" D="1" L="1" F="3" A="3" Pts="4" />
+	        <team name="Paraguay" W="1" D="1" L="1" F="5" A="3" Pts="4" />
+	        <team name="USA" W="0" D="2" L="1" F="2" A="3" Pts="2" />
+        </teams>
+       	<games>
+       	    <game home="Poland" away="Greece" result="1:1" date="8 June 2012">
+       	    </game>
+       	    <game home="Russian" away="Czech" result="4:1" date="8 June 2012">
+       	    </game>
+       	    <game home="Poland" away="Russian" result="1:1" date="12 June 2012">
+       	    </game>
+			<game home="Czech" away="Greece" result="2:1" date="12 June 2012">
+       	    </game>
+       	</games>
+    </group>
+	<group name="B">
+        <teams>
+	        <team name="Peru" W="2" D="0" L="0" F="3" A="1" Pts="6" />
+	        <team name="Brazil" W="1" D="0" L="1" F="3" A="3" Pts="3" />
+	        <team name="Ecuador" W="1" D="0" L="1" F="3" A="3" Pts="3" />
+	        <team name="Haiti" W="0" D="0" L="2" F="1" A="3" Pts="0" />
+        </teams>
+        <games>
+			<game home="Netherlands" away="Denmark" result="0:1" date="9 June 2012">
+       	    </game>
+       	    <game home="Germany" away="Portugal" result="1:0" date="9 June 2012">
+       	    </game>
+       	    <game home="Denmark" away="Portugal" result="2:3" date="13 June 2012">
+       	    </game>
+       	    <game home="Netherlands" away="Germany" result="1:2" date="13 June 2012">
+       	    </game>
+       	</games>
+	</group>
+	<group name="C">
+        <teams>
+	        <team name="Jamaica" W="1" D="1" L="0" F="5" A="1" Pts="4" />
+	        <team name="Mexico" W="1" D="1" L="0" F="4" A="2" Pts="4" />
+	        <team name="Uruguay" W="0" D="2" L="0" F="2" A="2" Pts="2" />
+	        <team name="Venezuela" W="0" D="0" L="2" F="1" A="7" Pts="0" />
+        </teams>
+		<games>
+			<game home="Spain" away="Italy" result="1:1" date="10 June 2012">
+      	    </game>
+       	    <game home="Ireland" away="Croatia" result="1:3" date="10 June 2012">
+       	    </game>
+       	    <game home="Italy" away="Croatia" result="1:1" date="14 June 2012">
+       	    </game>
+       	    <game home="Spain" away="Ireland" result="4:0" date="14 June 2012">
+       	    </game>
+		</games>
+	</group>
+	<group name="D">
+        <teams>
+	        <team name="Argentina" W="1" D="0" L="0" F="2" A="1" Pts="3" />
+	        <team name="Panama" W="0" D="1" L="0" F="1" A="0" Pts="1" />
+	        <team name="Chile" W="0" D="1" L="0" F="1" A="0" Pts="1" />
+	        <team name="Bolivia" W="0" D="0" L="1" F="1" A="2" Pts="0" />
+        </teams>
+        <games>
+        	<game home="France" away="England" result="1:1" date="11 June 2012">
+       	    </game>
+       	    <game home="Ukraine" away="Sweden" result="2:1" date="11 June 2012">
+       	    </game>
+    	</games>
+	</group>
+</europe_cup>
