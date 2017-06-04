@@ -1,47 +1,73 @@
 package cn.edu.zjicm.nba.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import cn.edu.zjicm.nba.R;
-import cn.edu.zjicm.nba.adapter.GroupAdapter;
+import cn.edu.zjicm.nba.activity.ChangePasswordActivity;
+import cn.edu.zjicm.nba.activity.LoginActivity;
 import cn.edu.zjicm.nba.http.HttpUtil;
-import cn.edu.zjicm.nba.model.Group;
-import cn.edu.zjicm.nba.model.Team;
 import okhttp3.Call;
 import okhttp3.Response;
 
+
 public class MineFragment extends Fragment {
 
+    TextView user_name_tx;
+    TextView real_name_tx;
+    TextView money_tx;
 
-    private List<Group> groupList = new ArrayList<>();
+    Button login_btn;
+    Button change_password_btn;
+    Button logout_btn;
 
+    LinearLayout login_ll;
+    LinearLayout user_info_ll;
+
+    private Handler handler=null;
+
+    private JSONObject object;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //创建属于主线程的handler
+        handler=new Handler();
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_group, container, false);
+        View view = inflater.inflate(R.layout.fragment_mine, container, false);
 
-        HttpUtil.sendOKHttpRequest("http://121.199.40.253/nba/group", new okhttp3.Callback() {
+        user_name_tx = (TextView) view.findViewById(R.id.user_name_tx);
+        real_name_tx = (TextView) view.findViewById(R.id.real_name_tx);
+        money_tx = (TextView) view.findViewById(R.id.money_tx);
+
+        login_btn = (Button) view.findViewById(R.id.login_btn);
+        change_password_btn = (Button) view.findViewById(R.id.change_password_btn);
+        logout_btn = (Button) view.findViewById(R.id.logout_btn);
+
+        login_ll = (LinearLayout) view.findViewById(R.id.login_ll);
+        user_info_ll = (LinearLayout) view.findViewById(R.id.user_info_ll);
+
+        HttpUtil.sendOKHttpRequest("http://121.199.40.253/nba/member", new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
 
@@ -51,49 +77,151 @@ public class MineFragment extends Fragment {
             public void onResponse(Call call, Response response) throws IOException {
 
                 String responseData = response.body().string();
-                parseJSONWithJSONObject(responseData);
+                try {
+
+                    JSONObject jsonObject = new JSONObject(responseData);
+                    if (jsonObject.getString("message").equals("success")) {
+                        object = jsonObject;
+                        handler.post(runnableUi2);
+
+                    }else {
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
             }
         });
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_group);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        GroupAdapter adapter = new GroupAdapter(groupList, getContext());
-        recyclerView.setAdapter(adapter);
-        return view;
+        login_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        change_password_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent2 = new Intent(getActivity(), ChangePasswordActivity.class);
+                startActivityForResult(intent2, 2);
+            }
+        });
+
+        logout_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                logout();
+            }
+        });
+        return view;
     }
 
 
-    private void parseJSONWithJSONObject(String jsonData) {
-        try {
+    private void logout() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpUtil.logoutOKHttpRequest("http://121.199.40.253/nba/logout", new okhttp3.Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                    }
 
-            JSONObject jsonObject = new JSONObject(jsonData);
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
 
-            JSONArray jsonArray = jsonObject.getJSONArray("value");
+                        String responseData = response.body().string();
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseData);
 
-            List<Team> teamList = new ArrayList<>();
+                            if (jsonObject.getString("message").equals("success")) {
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject json = jsonArray.getJSONObject(i);
-                JSONArray jsonArray1 = json.getJSONArray("teams");
-                for (int j = 0; j<jsonArray1.length();j++) {
+                                handler.post(runnableUi);
 
-                    JSONObject jsonObject1 = jsonArray1.getJSONObject(j);
-
-                    Team team = new Team(jsonObject1.getString("name"),
-                            jsonObject1.getString("englishName"),
-                            jsonObject1.getInt("win"),jsonObject1.getInt("lost"));
-                    teamList.add(team);
-                }
-
-                Group group = new Group(json.getString("name"), teamList);
-                groupList.add(group);
-
+                                Looper.prepare();
+                                Toast.makeText(getActivity(),
+                                        "退出当前帐号成功", Toast.LENGTH_SHORT).show();
+                                Looper.loop();
+                            } else {
+                                Looper.prepare();
+                                Toast.makeText(getActivity(),
+                                        "未登录", Toast.LENGTH_SHORT).show();
+                                Looper.loop();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        }).start();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 1:
+                if (resultCode == getActivity().RESULT_OK) {
+                    String username = data.getStringExtra("username");
+                    String realname = data.getStringExtra("realname");
+                    String money = data.getStringExtra("money");
+
+                    login_ll.setVisibility(View.GONE);
+                    user_info_ll.setVisibility(View.VISIBLE);
+                    user_name_tx.setText(username);
+                    real_name_tx.setText(realname);
+                    money_tx.setText(money);
+                }
+                break;
+            case 2:
+                if (resultCode == getActivity().RESULT_OK) {
+                    String username = data.getStringExtra("username");
+                    String realname = data.getStringExtra("realname");
+                    String money = data.getStringExtra("money");
+
+                    login_ll.setVisibility(View.GONE);
+                    user_info_ll.setVisibility(View.VISIBLE);
+                    user_name_tx.setText(username);
+                    real_name_tx.setText(realname);
+                    money_tx.setText(money);
+                }
+                break;
+            default:
         }
     }
 
+    // 构建Runnable对象，在runnable中更新界面
+    Runnable   runnableUi=new  Runnable(){
+        @Override
+        public void run() {
+            //更新界面
+            login_ll.setVisibility(View.VISIBLE);
+            user_info_ll.setVisibility(View.GONE);
+        }
+
+    };
+
+    Runnable   runnableUi2=new  Runnable(){
+        @Override
+        public void run() {
+            //更新界面
+            login_ll.setVisibility(View.GONE);
+            user_info_ll.setVisibility(View.VISIBLE);
+
+            try {
+                user_name_tx.setText(object.getJSONObject("value").getString("username"));
+                real_name_tx.setText(object.getJSONObject("value").getString("realname"));
+                money_tx.setText(object.getJSONObject("value").getString("money"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    };
 }

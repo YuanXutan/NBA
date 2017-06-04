@@ -6,8 +6,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 
 /**
  * Created by acer on 2017/5/31.
@@ -38,7 +40,7 @@ public class HttpUtil {
                     while ((line = reader.readLine()) != null) {
                         response.append(line);
                     }
-                    if(listener != null) {
+                    if (listener != null) {
                         listener.onFinish(response.toString());
                     }
                 } catch (Exception e) {
@@ -62,4 +64,32 @@ public class HttpUtil {
                 .build();
         client.newCall(request).enqueue(callback);
     }
+
+    public static void postOKHttpRequest(String address, String key1,
+                                         String value1,String key2,String value2, okhttp3.Callback callback) {
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body2 = new FormBody.Builder()
+                .add(key1, value1)
+                .add(key2, value2)
+                .build();
+        Request request = new Request.Builder()
+                .url(address)
+                .post(body2)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
+
+    public static void logoutOKHttpRequest(String address, okhttp3.Callback callback) {
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body2 = new FormBody.Builder()
+                .build();
+        Request request = new Request.Builder()
+                .url(address)
+                .post(body2)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
+
 }
